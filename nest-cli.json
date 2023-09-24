@@ -27,6 +27,17 @@
       "compilerOptions": {
         "tsConfigPath": "apps/producer/tsconfig.app.json"
       }
+    },
+    "metrics-viewer": {
+      "type": "application",
+      "root": "apps/metrics-viewer",
+      "entryFile": "main",
+      "sourceRoot": "apps/metrics-viewer/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/metrics-viewer/tsconfig.app.json",
+        "assets": ["static/*"],
+        "watchAssets": true
+      }
     }
   }
 }

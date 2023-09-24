@@ -2,13 +2,29 @@ version: '3.8'
 services:
   redis:
     image: redis:6.2-alpine
+
   producer:
+    build: .
+    command: nest start producer
+    environment:
+      - REDIS_HOST=redis
+      - METRICS_HOST-metrics-viewer:3000
+    depends_on:
+      - redis
+      - metrics-viewer
+
+  consumer:
+    build: .
+    command: nest start consumer
+    environment:
+      - REDIS_HOST=redis
+      - METRICS_HOST-metrics-viewer:3000
+    depends_on:
+      - redis
+      - metrics-viewer
+
+  metrics-viewer:
     build: .
     ports:
       - 8080:3000
-    command: nest start producer
-  consumer:
-    build: .
-    ports:
-      - 8081:3000
-    command: nest start consumer
+    command: nest start metrics-viewer

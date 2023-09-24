@@ -1,0 +1,52 @@
+<div>
+  <canvas id="chart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+
+<script>
+  const ctx = document.getElementById('chart');
+
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [],
+    },
+    options: {
+      parsing: {
+        xAxisKey: 'date',
+        yAxisKey: 'value',
+      },
+      scales: {
+        x: {
+          type: 'time',
+          time: {
+            unit: 'minute',
+          },
+        },
+      },
+    },
+  });
+
+  const stream = (url) => {
+    const eventSource = new EventSource(url);
+    const dataset = [];
+
+    eventSource.onmessage = ({ data }) => {
+      dataset.push(JSON.parse(data));
+      chart.update();
+    };
+
+    return dataset;
+  };
+
+  const producerData = stream('http://localhost:3000/api/stream/producer');
+  const consumerData = stream('http://localhost:3000/api/stream/consumer');
+
+  chart.data.datasets.push(
+    { data: producerData, label: 'producer' },
+    { data: consumerData, label: 'consumer' },
+  );
+</script>

@@ -3,6 +3,6 @@ import { ProducerModule } from './producer.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(ProducerModule);
-  await app.enableShutdownHooks().listen(3000);
+  await app.enableShutdownHooks().listen(3001);
 }
 bootstrap();
